@@ -1,3 +1,27 @@
+# Variáveis de ambiente (nunca subir pro GitHub)
 .env
-env
-venv
+
+# Cache Python
+__pycache__/
+*__pycache__*/
+pycache/
+*.py[cod]
+*.pyc
+*.pyo
+*.pyd
+*.cpython-*
+
+# Ambientes virtuais
+venv/
+.venv/
+env/
+
+# Arquivos de mídia
+*.mp4
+
+# IDEs
+.idea/
+.vscode/
+
+# Logs
+*.log
