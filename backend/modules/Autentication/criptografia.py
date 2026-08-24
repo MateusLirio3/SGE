@@ -20,7 +20,7 @@ import os
 # Querido(a) dev: SECRET_KEY DEVE estar no .env com pelo menos 64 caracteres.
 # Se não estiver definida, o sistema falha imediatamente no startup —
 # isso é intencional. Tokens JWT sem chave segura são trivialmente forjáveis.
-SECRET_KEY = os.environ["SECRET_KEY"]  # KeyError no startup se não definida — correto
+SECRET_KEY = os.getenv("SECRET_KEY")  # KeyError no startup se não definida — correto
 ALGORITHM  = os.getenv("ALGORITHM", "HS256")
 
 ENCRIPTADOR_PWD = CryptContext(schemes=["bcrypt"], deprecated="auto")

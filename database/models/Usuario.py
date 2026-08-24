@@ -1,6 +1,6 @@
 import hashlib
 from sqlalchemy import Column, String
-from database.database_config import classe_base
+from database.database_conection import classe_base
 from .ulid_Generator import TipoULID, gerar_ulid
 import bcrypt
 
@@ -14,6 +14,11 @@ class Usuario(classe_base):
     email      = Column(String(256), nullable=False)
     email_hash = Column(String(64), nullable=False, unique=True)
     senha      = Column(String(60), nullable=False)
+    tipo       = Column(String(60), nullable = False)
+
+    __mapper_args__ = {
+        "polymorphic_on" : tipo
+    }
 
     def definir_senha(self, senha_pura: str):
         self.senha = bcrypt.hashpw(senha_pura.encode(), bcrypt.gensalt()).decode()

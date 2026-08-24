@@ -5,7 +5,7 @@ from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.templating import Jinja2Templates
 
-from backend.modules.Autentication import criar_token_de_acesso
+from backend.modules.Autentication.criptografia import criar_token_de_acesso
 
 from database.database_conection import pegar_sessao
 
@@ -28,7 +28,7 @@ async def carregarPaginaLogin(request: Request):
 @router.post("/login/submit", tags=["Autenticação","API","Submit"])
 async def login(
     form_data: OAuth2PasswordRequestForm = Depends(),
-    sessao= Depends(pegar_sessao())
+    sessao= Depends(pegar_sessao)
 ):
     from database.databaseCrud.UsuarioCrud import autenticar_usuario
     from database.databaseCrud.Erros import ErroNaoEncontrado

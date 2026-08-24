@@ -1,5 +1,5 @@
 from sqlalchemy import Column, String
-from database.database_config import classe_base
+from database.database_conection import classe_base
 from .ulid_Generator import TipoULID, gerar_ulid
 
 class Turma(classe_base):
