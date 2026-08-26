@@ -11,10 +11,10 @@ def criar_Coordenador(nome, email, senha, matricula):
         novo = Coordenador(
             matricula=matricula,
             nome=nome,
-            email=Usuario.email,
+            email=email,
             email_hash=Usuario.hash_email(email)
         )
-        novo.deifnir_senha(senha)
+        novo.definir_senha(senha)
         sessao.add(novo)
         sessao.commit()
         sessao.refresh(novo)

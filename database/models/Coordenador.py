@@ -1,9 +1,8 @@
 from sqlalchemy import Column, String, ForeignKey
-from database.database_conection import classe_base
 from database.models.Usuario import Usuario
 from .ulid_Generator import TipoULID, gerar_ulid
 
-class Coordenador(classe_base):
+class Coordenador(Usuario):
 
     __tablename__ = "coordenadores"
 

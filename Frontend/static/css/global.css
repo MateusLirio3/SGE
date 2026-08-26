@@ -1,8 +1,9 @@
 :root {
-    --cor-primaria: #90CAF9;
+    --cor-primaria: #76bffa;
     --cor-secundaria: #5996FF;
     --cor-destaque: #1B4EF5;
     --cor-desabilitado: #9CD5FF;
+    --cor-primaria-hover: #327dff;
 
     --bg-pagina:    #E3F2FD;
     --bg-card:      #FBFBFB;
@@ -44,7 +45,7 @@
 
 @font-face {
     font-family: "Nanutes";
-    src: url("/static/fonts/Nanutes-Regular.ttf") format("truetype");
+    src: url("Assets/Font/nunito/static/Nunito-Regular.ttf") format("truetype");
     font-weight: normal;
     font-style: normal;
 }

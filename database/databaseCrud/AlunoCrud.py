@@ -11,10 +11,10 @@ def criar_Aluno(nome, email, senha, matricula):
         novo = Aluno(
             matricula=matricula,
             nome=nome,
-            email=Usuario.email,
+            email=email,
             email_hash=Usuario.hash_email(email)
         )
-        novo.deifnir_senha(senha)
+        novo.definir_senha(senha)
         sessao.add(novo)
         sessao.commit()
         sessao.refresh(novo)

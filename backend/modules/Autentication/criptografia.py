@@ -1,17 +1,3 @@
-# backend/modulos/autenticacao/criptografia.py
-
-"""
-Módulo central de autenticação.
-
-Responsável por todas as operações criptográficas e de identidade:
-hashing de senhas, geração e decodificação de tokens JWT.
-
-Variáveis de ambiente obrigatórias:
-    SECRET_KEY : Chave secreta para assinar tokens JWT.
-                 Gere com: python -c "import secrets; print(secrets.token_hex(64))"
-    ALGORITHM  : Algoritmo JWT (padrão: HS256)
-"""
-
 from datetime import datetime, timedelta, timezone
 import jwt
 from passlib.context import CryptContext
@@ -20,7 +6,7 @@ import os
 # Querido(a) dev: SECRET_KEY DEVE estar no .env com pelo menos 64 caracteres.
 # Se não estiver definida, o sistema falha imediatamente no startup —
 # isso é intencional. Tokens JWT sem chave segura são trivialmente forjáveis.
-SECRET_KEY = os.getenv("SECRET_KEY")  # KeyError no startup se não definida — correto
+SECRET_KEY = os.get("SECRET_KEY")  # KeyError no startup se não definida — correto
 ALGORITHM  = os.getenv("ALGORITHM", "HS256")
 
 ENCRIPTADOR_PWD = CryptContext(schemes=["bcrypt"], deprecated="auto")

@@ -1,36 +1,3 @@
-# backend/modulos/autenticacao/autenticacao_geral_fastapi.py
-#
-# ALTERAÇÕES em relação à versão anterior:
-#   1. MAPA_CARGO agora inclui "admin" → "Administrador(a)"
-#   3. Nova constante TIPOS_ADMIN e nova dependência verificar_admin
-#   4. get_usuario_atual_pagina_admin → redireciona para /login se não autenticado
-#      (igual ao de página, mas para o painel admin)
-
-"""
-Dependências de autenticação para o FastAPI.
-
-Este módulo expõe quatro dependências:
-
-  get_usuario_atual
-    → Para rotas de API (retorna JSON 401 se não autenticado)
-
-  get_usuario_atual_pagina
-    → Para rotas de PÁGINA HTML (redireciona para /login)
-
-  verificar_bibliotecario
-    → Para rotas exclusivas de bibliotecários (retorna 403 se não for bibliotecário)
-    → Sempre use esta dependência em rotas sob /bibliotecario/
-
-  verificar_admin
-    → Para rotas exclusivas do administrador (retorna 403 se não for admin)
-    → Use em rotas sob /admin/
-
-Exemplo de uso:
-    @router.post("/admin/bibliotecarios/criar")
-    async def criar(body: CriarBibliotecarioBody, usuario=Depends(verificar_admin)):
-        ...
-"""
-
 from fastapi import Depends, HTTPException, Cookie
 from fastapi.security import OAuth2PasswordBearer
 from typing import Annotated
@@ -83,6 +50,7 @@ def _autenticar_token(access_token: str | None) -> dict:
         "nome":      usuario.nome,
         "email":     usuario.email,
         "matricula": matricula,
+        "tipo": usuario.tipo
     }
 
     return usuario_dict
@@ -107,23 +75,28 @@ async def get_usuario_atual_pagina(
     except HTTPException:
         raise RedirecionarParaLogin()
 
-# REFAZER 
-# ── Dependência para rotas exclusivas de bibliotecários ──────────────────────
+# ── Dependência para rotas exclusivas de Coordenadores ──────────────────────
 
-async def verificar_bibliotecario(
+async def verificar_Coordenador(
     usuario: Annotated[dict, Depends(get_usuario_atual)]
 ) -> dict:
-    """
-    Verifica se o usuário autenticado é bibliotecário.
-    Retorna 403 se for aluno, visitante, admin ou qualquer outro tipo.
 
-    Querido(a) dev: use esta dependência em TODAS as rotas sob /bibliotecario/
-    que executam ações (criar, editar, excluir, listar dados sensíveis).
-    Rotas de página HTML podem continuar usando get_usuario_atual_pagina.
-    """
-    # if usuario.get("tipo") not in TIPOS_BIBLIOTECARIO:
-    #     raise HTTPException(
-    #         status_code=403,
-    #         detail="Acesso restrito a bibliotecários."
-    #     )
-    # return usuario
+    if usuario.get("tipo") != "Coordenador":
+        raise HTTPException(
+            status_code=403,
+            detail="Acesso restrito a Coordenadores."
+        )
+    return usuario
+
+# ── Dependência para rotas exclusivas de Admins ──────────────────────
+
+async def verificar_Admin(
+    usuario: Annotated[dict, Depends(get_usuario_atual)]
+) -> dict:
+
+    if usuario.get("tipo") != "Admin":
+        raise HTTPException(
+            status_code=403,
+            detail="Acesso restrito a Administradores do sistema."
+        )
+    return usuario

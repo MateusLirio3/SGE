@@ -75,19 +75,18 @@ def buscar_todos_usuarios():
         sessao.close()
 
 
-def autenticar_usuario(identificador, senha):
+def autenticar_usuario(identificador, senha, sessao):
 
     import re
 
     id_limpo     = identificador.strip()
     eh_matricula = bool(re.match(r'^\d{13}$', id_limpo))
 
-    sessao = sessao_local()
     try:
         if eh_matricula:
-            h       = Aluno.hash_matricula(id_limpo)
+            h       = Aluno.matricula
             usuario = sessao.query(Aluno).filter(
-                Aluno.matricula_hash == h
+                Aluno.matricula == h
             ).first()
 
         else:

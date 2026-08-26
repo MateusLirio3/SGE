@@ -100,7 +100,7 @@ def atualizar_Turma(nome, novo_nome=None, novo_periodo=None, nova_descricao=None
 def deletar_turma(nome):
     sessao = sessao_local()
     try:
-        Turma = sessao.query(Turma).filter(Turma.nome = nome).first()
+        Turma = sessao.query(Turma).filter(Turma.nome == nome).first()
         if Turma is None:
             raise ErroNaoEncontrado(f"Turma nao encontrado (nome={nome})")
         sessao.delete(Turma)

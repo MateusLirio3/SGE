@@ -34,7 +34,7 @@ async def login(
     from database.databaseCrud.Erros import ErroNaoEncontrado
 
     try:
-        usuario = autenticar_usuario(form_data.username,form_data.password)
+        usuario = autenticar_usuario(form_data.username,form_data.password, sessao)
     except ErroNaoEncontrado:
         raise HTTPException(
             status_code=401,
@@ -56,12 +56,12 @@ async def login(
 
 
     response = JSONResponse(content={
-        "access_token": token_de_acesso,
         "token_type":   "bearer",
         "usuario":      usuario.nome,
     })
 
     response.set_cookie(
+        secure=True,
         key="access_token",
         value=token_de_acesso,
         httponly=True,
