@@ -18,7 +18,6 @@ COORDENADOR = {
     "matricula": "COORD-2026-001",
 }
 
-
 def criar_usuario_se_nao_existir(modelo, dados):
     sessao = sessao_local()
     try:

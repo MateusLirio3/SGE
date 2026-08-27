@@ -2,12 +2,16 @@ from datetime import datetime, timedelta, timezone
 import jwt
 from passlib.context import CryptContext
 import os
+from config import settings
 
 # Querido(a) dev: SECRET_KEY DEVE estar no .env com pelo menos 64 caracteres.
 # Se não estiver definida, o sistema falha imediatamente no startup —
 # isso é intencional. Tokens JWT sem chave segura são trivialmente forjáveis.
-SECRET_KEY = os.get("SECRET_KEY")  # KeyError no startup se não definida — correto
+SECRET_KEY = settings.secret_key
 ALGORITHM  = os.getenv("ALGORITHM", "HS256")
+
+if not SECRET_KEY:
+    raise KeyError("Secret key vazia ou não lida")
 
 ENCRIPTADOR_PWD = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

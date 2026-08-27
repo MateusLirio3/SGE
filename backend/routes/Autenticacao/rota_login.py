@@ -6,16 +6,17 @@ from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.templating import Jinja2Templates
 
 from backend.modules.Autentication.criptografia import criar_token_de_acesso
+from backend.routes.CSRF.csrfRoutes import verify_csrf
 
 from database.database_conection import pegar_sessao
 
 # ─────────────────────────────────────────────────────────────────────────────
-DURACAO_SESSAO_HORAS    = 8                             # 8h = um turno completo
+DURACAO_SESSAO_HORAS    = 8                             
 DURACAO_SESSAO_SEGUNDOS = DURACAO_SESSAO_HORAS * 3600   # usado no max_age dos cookies
 
 templates = Jinja2Templates(directory="frontend/pages")
 
-router = APIRouter()
+router = APIRouter(dependencies=[Depends(verify_csrf)])
 
 @router.get("/login", tags=["Autenticação","Paginas"])
 async def carregarPaginaLogin(request: Request):
@@ -58,6 +59,7 @@ async def login(
     response = JSONResponse(content={
         "token_type":   "bearer",
         "usuario":      usuario.nome,
+        "tipo":         usuario.tipo
     })
 
     response.set_cookie(

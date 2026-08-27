@@ -1,8 +1,13 @@
 import importlib
 import pkgutil
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends, Request
+from fastapi_csrf_protect import CsrfProtect
 
-api_router = APIRouter()
+async def verify_csrf(request: Request, csrf_protect: CsrfProtect = Depends()):
+    if request.method not in ["GET", "HEAD", "OPTIONS"]:
+        await csrf_protect.validate_csrf(request)
+
+api_router = APIRouter(dependencies=[Depends(verify_csrf)])
 
 def _incluir_routers_do_pacote(pacote_nome: str):
     pacote = importlib.import_module(pacote_nome)

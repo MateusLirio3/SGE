@@ -7,7 +7,7 @@ class Aluno(Usuario):
     __tablename__ = "alunos"
 
     id         = Column(TipoULID, ForeignKey("usuarios.id"), primary_key=True, default=gerar_ulid)
-    matricula       = Column(String(13), nullable=False)
+    matricula       = Column(String(13), nullable=False, unique = True)
 
     __mapper_args__ = {
         "polymorphic_identity" : "Aluno"
