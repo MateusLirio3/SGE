@@ -1,11 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Esqueceu a Senha - SIGA</title>
+
+    <link rel="stylesheet" href="/static/css/global.css">
+    <link rel="stylesheet" href="/static/css/esqueceuSenha.css">
+    <link rel="stylesheet" href="/static/css/Components/toast.css">
 </head>
+
 <body>
-    <h1>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sit animi, voluptas aliquid repudiandae omnis unde consequatur ullam blanditiis laboriosam possimus nostrum veniam esse voluptate fugiat voluptates voluptatibus ratione dicta ab!</h1>
+    <section class="container-recuperacao">
+
+        <div class="saudacao">
+            <h1> Esqueceu a Senha? </h1>
+            <h2> Informe seu e-mail para redefinir </h2>
+        </div>
+
+        <form id="form-recuperacao">
+            <div class="campos-formulario">
+
+                <label class="grupo_label">E-mail</label>
+                <div class="grupo_input">
+                    <input type="email" name="email" placeholder="Digite seu e-mail cadastrado" required>
+                </div>
+
+                <div class="links_acao">
+                    <a href="/login" class="link_voltar">← Voltar ao login</a>
+                </div>
+
+                <button type="button" class="botao_recuperar" id="btnRecuperar">Enviar link de redefinição</button>
+
+            </div>
+        </form>
+
+    </section>
+
+    <script src="/static/js/Components/toast.js"></script>
+    <script src="/static/js/autenticacao/esqueceuSenha.js"></script>
 </body>
+
 </html>
