@@ -5,25 +5,26 @@
     --cor-desabilitado: #9CD5FF;
     --cor-primaria-hover: #327dff;
 
-    --bg-pagina:    #E3F2FD;
-    --bg-card:      #FBFBFB;
-    --bg-hover:     #E0E0E0;
-    --bg-navbar:      #66A3BF;
+    --bg-pagina: #E3F2FD;
+    --bg-card: #FBFBFB;
+    --bg-hover: #E0E0E0;
+    --bg-navbar: #66A3BF;
 
-    --texto-titulo:  #0e0d0f;
+    --texto-titulo: #0e0d0f;
     --texto-subtitulo: #2a2a2d;
     --texto-secundario: #666666;
     --texto-terciario: #888888;
     --texto-placeholder: #aaaaaa;
     --texto-link: #000000;
+    --texto-corpo: #333333;
 
     --borda-cor: #e8e8e8;
     --borda-input: #d0d5dd;
     --borda-sutil: #f0f0f0;
 
     --sombra-card: rgba(2, 173, 230, 0.08);
-    --sombra-modal: rgba(0,0,0,0.18);
-    --sombra-navbar: rgba(0,0,0,0.10);
+    --sombra-modal: rgba(0, 0, 0, 0.18);
+    --sombra-navbar: rgba(0, 0, 0, 0.10);
 
     --sidebar-texto: #000000;
     --sidebar-texto-hover: #ffffff;
@@ -60,6 +61,8 @@ body {
     font-family: var(--fonte-principal);
     background-color: var(--bg-pagina);
     color: var(--texto-corpo);
+    line-height: 1.6;
+    min-height: 100vh;
 }
 
 [hidden] {
@@ -69,4 +72,29 @@ body {
 a {
     color: var(--texto-link);
     text-decoration: none;
+    transition: color 0.3s;
+}
+
+a:hover {
+    color: var(--cor-primaria-hover);
+    text-decoration: underline;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-pagina);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--cor-primaria);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--cor-primaria-hover);
 }
