@@ -7,7 +7,7 @@ ROTAS_SEM_CSRF = [
     "/logout",
     "/login",
     "/esqueceu-senha",
-    "/api/permissoes"
+    "/permissoes/permissoes"
 ]
 
 async def verify_csrf(request: Request, csrf_protect: CsrfProtect = Depends()):

@@ -1,5 +1,5 @@
 function carregarComponentes(tipoUsuario, nomeUsuario) {
-    fetch('/api/permissoes')
+    fetch('/permissoes/permissoes')
         .then(function (res) {
             if (!res.ok) throw new Error('Erro ao carregar permissões: ' + res.status);
             return res.json();

@@ -3,7 +3,7 @@ from backend.permissoes import PERMISSOES
 
 router = APIRouter()
 
-@router.get("/api/permissoes")
+@router.get("/permissoes/permissoes")
 async def get_permissoes(request: Request):
     tipo = request.cookies.get("tipo_usuario", "")
     
