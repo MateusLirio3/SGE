@@ -1,24 +1,44 @@
-var todosAlunos = [
-    { id: 1, nome: 'Ana Silva', matricula: '2024001', cpf: '123.456.789-00', curso: 'Engenharia de Software', turma: '3° A', status: 'Ativo', email: 'ana@email.com', telefone: '(11) 99999-9999', endereco: 'Rua das Flores, 123', data_nascimento: '2000-05-15' },
-    { id: 2, nome: 'Carlos Santos', matricula: '2024002', cpf: '987.654.321-00', curso: 'Ciência da Computação', turma: '2° B', status: 'Ativo', email: 'carlos@email.com', telefone: '(11) 98888-8888', endereco: 'Av. Principal, 456', data_nascimento: '2001-08-20' },
-    { id: 3, nome: 'Mariana Costa', matricula: '2024003', cpf: '456.789.123-00', curso: 'Sistemas de Informação', turma: '1° A', status: 'Pendente', email: 'mariana@email.com', telefone: '(11) 97777-7777', endereco: 'Rua das Palmeiras, 789', data_nascimento: '2000-11-10' },
-    { id: 4, nome: 'João Pereira', matricula: '2024004', cpf: '789.123.456-00', curso: 'Engenharia de Software', turma: '3° B', status: 'Ativo', email: 'joao@email.com', telefone: '(11) 96666-6666', endereco: 'Av. Brasil, 1010', data_nascimento: '1999-03-25' },
-    { id: 5, nome: 'Fernanda Lima', matricula: '2024005', cpf: '321.654.987-00', curso: 'Ciência da Computação', turma: '2° A', status: 'Inativo', email: 'fernanda@email.com', telefone: '(11) 95555-5555', endereco: 'Rua dos Pinheiros, 202', data_nascimento: '2001-07-30' }
-];
+let alunos = [];
+let nextId = 1;
+
+async function carregarAlunos() {
+    try {
+        const resposta = await fetch('/API/GetAlunos', {
+            credentials: 'same-origin'
+        });
+
+        if (!resposta.ok) {
+            throw new Error('Resposta inválida da API');
+        }
+
+        const dados = await resposta.json();
+        alunos = Array.isArray(dados) ? dados : [];
+        return alunos;
+    } catch (erro) {
+        console.error('❌ Falha ao carregar alunos!', erro);
+        alunos = [];
+        return [];
+    }
+}
 
 var alunoAtual = null;
 
-function carregarAluno() {
-    var path = window.location.pathname;
-    var partes = path.split('/');
-    var id = parseInt(partes[partes.length - 1]);
+async function carregarAluno() {
+    const path = window.location.pathname;
+    const idAluno = path.split('/').filter(Boolean).pop();
 
-    for (var i = 0; i < todosAlunos.length; i++) {
-        if (todosAlunos[i].id === id) {
-            alunoAtual = todosAlunos[i];
-            break;
+    const lista = await carregarAlunos();
+    const aluno = lista.find(a => String(a.id) === String(idAluno));
+
+    if (!aluno) {
+        const topo = document.querySelector('.perfil-topo');
+        if (topo) {
+            topo.innerHTML = '<p style="padding:40px;color:#f44336;">Aluno não encontrado</p>';
         }
+        return;
     }
+
+    alunoAtual = aluno;
 
     if (!alunoAtual) {
         document.querySelector('.perfil-topo').innerHTML = '<p style="padding:40px;color:#f44336;">Aluno não encontrado</p>';
@@ -83,9 +103,9 @@ function salvarEdicao(event) {
         telefone: document.getElementById('editTelefone').value.trim()
     };
 
-    for (var i = 0; i < todosAlunos.length; i++) {
-        if (todosAlunos[i].id === id) {
-            todosAlunos[i] = dados;
+    for (var i = 0; i < alunos.length; i++) {
+        if (alunos[i].id === id) {
+            alunos[i] = dados;
             break;
         }
     }

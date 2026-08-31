@@ -23,7 +23,7 @@ async def listarTurmas(request: Request):
     )
 
 @router.get("/Turma/{turma_id}", tags=["Coordenador", "Turmas"])
-async def detalhesTurma(request: Request, turma_id: int):
+async def detalhesTurma(request: Request, turma_id: str):
     tipo = request.cookies.get("tipo_usuario", "")
         
     # colocar pra redirecionar pra pagina de erro(tem que criar tbm)
@@ -36,6 +36,6 @@ async def detalhesTurma(request: Request, turma_id: int):
     
     return templates.TemplateResponse(
         request=request,
-        name="turma_detalhes.html",
+        name="turma_detalhe.html",
         context={"request": request, "turma_id": turma_id}
     )

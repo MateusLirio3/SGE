@@ -96,6 +96,13 @@ def atualizar_Turma(nome, novo_nome=None, novo_periodo=None, nova_descricao=None
     finally:
         sessao.close()
 
+def contar_Turmas():
+    sessao = sessao_local()
+    try:
+        resultado = sessao.query(Turma).count()
+        return resultado
+    finally:
+        sessao.close()
 
 def deletar_turma(nome):
     sessao = sessao_local()

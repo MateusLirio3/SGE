@@ -1,19 +1,41 @@
-let dados = [
-    { id: 1, nome: '3° A', curso: 'Engenharia de Software', periodo: 'Matutino', alunos: 42, status: 'Ativa', ano: 2026, vagas: 45 },
-    { id: 2, nome: '2° B', curso: 'Ciência da Computação', periodo: 'Vespertino', alunos: 38, status: 'Ativa', ano: 2026, vagas: 40 },
-    { id: 3, nome: '1° A', curso: 'Sistemas de Informação', periodo: 'Noturno', alunos: 35, status: 'Ativa', ano: 2026, vagas: 40 },
-    { id: 4, nome: '3° B', curso: 'Engenharia de Software', periodo: 'Matutino', alunos: 28, status: 'Concluída', ano: 2025, vagas: 40 },
-    { id: 5, nome: '2° A', curso: 'Análise de Sistemas', periodo: 'Vespertino', alunos: 30, status: 'Inativa', ano: 2026, vagas: 35 }
-];
-let nextId = 6;
+let turmas = [];
+let nextId = 1;
 
-function renderizar(lista) {
+async function carregarTurmas() {
+    try {
+        const resposta = await fetch('/API/GetTurmas', {
+            credentials: 'same-origin'
+        });
+
+        if (!resposta.ok) {
+            throw new Error('Resposta inválida da API');
+        }
+
+        const dados = await resposta.json();
+        turmas = Array.isArray(dados) ? dados : [];
+        renderizarTurmas(turmas);
+        return turmas;
+    } catch (erro) {
+        console.error('Falha ao carregar turmas!', erro);
+        turmas = [];
+        renderizarTurmas(turmas);
+        return [];
+    }
+}
+
+function renderizarTurmas(lista) {
     const tbody = document.getElementById('tableBody');
-    const dadosFiltrados = lista || dados;
+    const dadosFiltrados = Array.isArray(lista) ? lista : turmas;
 
-    if (dadosFiltrados.length === 0) {
+    if (!tbody) {
+        console.error('❌ tableBody não encontrado!');
+        return;
+    }
+
+    if (!Array.isArray(dadosFiltrados) || dadosFiltrados.length === 0) {
         tbody.innerHTML = `<tr><td colspan="7" class="empty-state"><i class="fas fa-door-open"></i><p>Nenhuma turma encontrada</p><button class="btn-primary" onclick="abrirModal()"><i class="fas fa-plus"></i> Adicionar</button></td></tr>`;
-        document.getElementById('totalRegistros').textContent = '0 turmas';
+        const totalEl = document.getElementById('totalRegistros');
+        if (totalEl) totalEl.textContent = '0 turmas';
         return;
     }
 
@@ -22,43 +44,53 @@ function renderizar(lista) {
         return `<tr>
             <td>${item.id}</td>
             <td><strong>${item.nome}</strong></td>
-            <td>${item.curso}</td>
+            <td>${item.descricao}</td>
             <td>${item.periodo}</td>
             <td>${item.alunos}/${item.vagas}</td>
             <td><span class="status-badge ${statusClass}">${item.status}</span></td>
             <td>
-                <button class="action-btn view" onclick="visualizar(${item.id})"><i class="fas fa-eye"></i></button>
-                <button class="action-btn edit" onclick="editar(${item.id})"><i class="fas fa-edit"></i></button>
-                <button class="action-btn delete" onclick="excluir(${item.id})"><i class="fas fa-trash"></i></button>
+                <button class="action-btn view" onclick="visualizar('${item.id}')"><i class="fas fa-eye"></i></button>
+                <button class="action-btn edit" onclick="editar('${item.id}')"><i class="fas fa-edit"></i></button>
+                <button class="action-btn delete" onclick="excluir('${item.id}')"><i class="fas fa-trash"></i></button>
             </td>
         </tr>`;
     }).join('');
 
-    document.getElementById('totalRegistros').textContent = dadosFiltrados.length + ' turmas';
+    const totalEl = document.getElementById('totalRegistros');
+    if (totalEl) totalEl.textContent = dadosFiltrados.length + ' turmas';
 }
 
 function filtrar() {
     const search = document.getElementById('searchInput').value.toLowerCase();
     const curso = document.getElementById('filterCurso').value;
     const periodo = document.getElementById('filterPeriodo').value;
-    const filtrados = dados.filter(item => {
-        const matchSearch = item.nome.toLowerCase().includes(search) || item.curso.toLowerCase().includes(search);
+
+    const filtrados = turmas.filter(item => {
+        const nome = (item.nome || '').toLowerCase();
+        const cursoItem = (item.curso || '').toLowerCase();
+        const matchSearch = nome.includes(search) || cursoItem.includes(search);
         const matchCurso = curso === '' || item.curso === curso;
         const matchPeriodo = periodo === '' || item.periodo === periodo;
         return matchSearch && matchCurso && matchPeriodo;
     });
-    renderizar(filtrados);
+
+    renderizarTurmas(filtrados);
 }
 
 function limparFiltros() {
     document.getElementById('searchInput').value = '';
     document.getElementById('filterCurso').value = '';
     document.getElementById('filterPeriodo').value = '';
-    renderizar(dados);
+    renderizarTurmas(turmas);
 }
 
 function visualizar(id) {
-    window.location.href = '/Coordenador/Turma/' + id;
+    var turma = turmas.find(t => String(t.id) === String(id));
+    if (!turma) {
+        alert('Turma não encontrada!');
+        return;
+    }
+    window.location.href = '/Turma/' + String(turma.id);
 }
 
 function abrirModal(item) {
@@ -71,7 +103,7 @@ function abrirModal(item) {
         btn.textContent = 'Atualizar';
         document.getElementById('itemId').value = item.id;
         document.getElementById('nome').value = item.nome;
-        document.getElementById('curso').value = item.curso;
+        document.getElementById('curso').value = item.descricao;
         document.getElementById('periodo').value = item.periodo;
         document.getElementById('status').value = item.status;
         document.getElementById('ano').value = item.ano;
@@ -91,12 +123,13 @@ function abrirModal(item) {
 }
 
 function fecharModal() {
-    document.getElementById('modal').classList.remove('ativo');
+    const modal = document.getElementById('modal');
+    if (modal) modal.classList.remove('ativo');
     document.body.style.overflow = '';
 }
 
 function editar(id) {
-    const item = dados.find(item => item.id === id);
+    const item = turmas.find(item => String(item.id) === String(id));
     if (item) abrirModal(item);
 }
 
@@ -114,33 +147,35 @@ function salvar(event) {
     };
 
     if (id) {
-        const index = dados.findIndex(item => item.id === parseInt(id));
+        const index = turmas.findIndex(item => String(item.id) === String(id));
         if (index !== -1) {
-            dados[index] = { ...dados[index], ...dadosItem };
+            turmas[index] = { ...turmas[index], ...dadosItem };
             showToast('Turma atualizada com sucesso!', 'success');
         }
     } else {
-        dadosItem.id = nextId++;
-        dados.push(dadosItem);
+        dadosItem.id = String(nextId++);
+        turmas.push(dadosItem);
         showToast('Turma cadastrada com sucesso!', 'success');
     }
 
     fecharModal();
-    renderizar(dados);
+    renderizarTurmas(turmas);
 }
 
 function excluir(id) {
-    const item = dados.find(item => item.id === id);
+    const item = turmas.find(item => String(item.id) === String(id));
     if (!item) return;
     if (confirm('Tem certeza que deseja excluir a turma "' + item.nome + '"?')) {
-        dados = dados.filter(item => item.id !== id);
-        renderizar(dados);
+        turmas = turmas.filter(item => String(item.id) !== String(id));
+        renderizarTurmas(turmas);
         showToast('Turma "' + item.nome + '" excluída', 'error');
     }
 }
 
 function showToast(message, type) {
     const container = document.getElementById('toast-container');
+    if (!container) return;
+
     const toast = document.createElement('div');
     toast.className = 'toast toast-' + (type || 'info');
     toast.innerHTML = `<span>${message}</span><button onclick="this.parentElement.remove()" style="background:none;border:none;font-size:18px;cursor:pointer;color:#999;">×</button>`;
@@ -149,5 +184,5 @@ function showToast(message, type) {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
-    renderizar(dados);
+    carregarTurmas();
 });

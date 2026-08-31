@@ -7,7 +7,7 @@ templates = Jinja2Templates(directory="frontend/pages/Coordenador")
 router = APIRouter()
 
 @router.get("/Aluno/{aluno_id}", tags=["Aluno", "Detalhes"])
-async def detalhesAluno(request: Request, aluno_id: int):
+async def detalhesAluno(request: Request, aluno_id: str):
     tipo = request.cookies.get("tipo_usuario", "")
         
     # colocar pra redirecionar pra pagina de erro(tem que criar tbm)

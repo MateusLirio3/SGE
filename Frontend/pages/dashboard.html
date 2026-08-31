@@ -19,65 +19,49 @@
             {% if tipo_usuario == 'Coordenador' %}
             <div class="metric-card">
                 <span class="metric-label">Alunos</span>
-                <span class="metric-value">1.284</span>
-                <span class="metric-change positive">+12%</span>
+                <span class="metric-value" id="contagemAlunos"></span>
             </div>
             <div class="metric-card">
                 <span class="metric-label">Professores</span>
-                <span class="metric-value">64</span>
-                <span class="metric-change neutral">±0</span>
+                <span class="metric-value" id="contagemProfessores"></span>
             </div>
             <div class="metric-card">
                 <span class="metric-label">Turmas</span>
-                <span class="metric-value">32</span>
-                <span class="metric-change positive">+2</span>
-            </div>
-            <div class="metric-card">
-                <span class="metric-label">Matrículas</span>
-                <span class="metric-value">1.156</span>
-                <span class="metric-change positive">+8%</span>
+                <span class="metric-value" id="contagemTurmas"></span>
             </div>
             {% elif tipo_usuario == 'Aluno' %}
             <div class="metric-card">
                 <span class="metric-label">Minhas Matrículas</span>
                 <span class="metric-value">3</span>
-                <span class="metric-change positive">Ativo</span>
             </div>
             <div class="metric-card">
                 <span class="metric-label">Minhas Notas</span>
                 <span class="metric-value">8.5</span>
-                <span class="metric-change positive">Média</span>
             </div>
             <div class="metric-card">
                 <span class="metric-label">Frequência</span>
                 <span class="metric-value">92%</span>
-                <span class="metric-change positive">+5%</span>
             </div>
             <div class="metric-card">
                 <span class="metric-label">Turma</span>
                 <span class="metric-value">3° A</span>
-                <span class="metric-change neutral">—</span>
             </div>
             {% elif tipo_usuario == 'Professor' %}
             <div class="metric-card">
                 <span class="metric-label">Minhas Turmas</span>
                 <span class="metric-value">4</span>
-                <span class="metric-change positive">+1</span>
             </div>
             <div class="metric-card">
                 <span class="metric-label">Meus Alunos</span>
                 <span class="metric-value">120</span>
-                <span class="metric-change neutral">±0</span>
             </div>
             <div class="metric-card">
                 <span class="metric-label">Aulas</span>
                 <span class="metric-value">16</span>
-                <span class="metric-change positive">+2</span>
             </div>
             <div class="metric-card">
                 <span class="metric-label">Frequência Geral</span>
                 <span class="metric-value">78%</span>
-                <span class="metric-change negative">-3%</span>
             </div>
             {% endif %}
         </div>
@@ -250,6 +234,7 @@
     </main>
 
     <script src="../static/js/Components/carregadorComponentes.js"></script>
+    <script src="/static/js/dashboard.js"></script>
 </body>
 
 </html>

@@ -56,6 +56,14 @@ def buscar_Coordenador_por_matricula(matricula):
     finally:
         sessao.close()
 
+def contar_Coordenador():
+    sessao = sessao_local()
+    try:
+        resultado = sessao.query(Coordenador).count()
+        return resultado
+    finally:
+        sessao.close()
+
 def autenticar_Coordenador(matricula, senha):
 
     sessao = sessao_local()

@@ -36,6 +36,14 @@ def buscar_todos_Alunos():
     finally:
         sessao.close()
 
+def contar_Alunos():
+    sessao = sessao_local()
+    try:
+        resultado = sessao.query(Aluno).count()
+        return resultado
+    finally:
+        sessao.close()
+
 
 def autenticar_Aluno(matricula, senha):
 

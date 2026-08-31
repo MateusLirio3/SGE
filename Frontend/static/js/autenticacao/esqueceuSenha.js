@@ -1,23 +1,65 @@
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+}
+
+async function carregarTokenCsrf() {
+    const resposta = await fetch('/get-token', {
+        credentials: 'same-origin',
+        cache: 'no-store'
+    });
+    if (!resposta.ok) throw new Error('Não foi possível obter o token CSRF');
+    return resposta.headers.get('X-CSRF-Token');
+}
+
+
+
 document.addEventListener('DOMContentLoaded', function () {
     const emailInput = document.querySelector('input[name="email"]');
-    const btnRecuperar = document.getElementById('btnRecuperar');
-    
+    const form = document.getElementById("form-recuperacao");
+    const botao = document.getElementById("btnRecuperar");
+    let intervalo = null;
+
+    if (!emailInput || !form || !botao) {
+        return;
+    }
+
     function isValidEmail(email) {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
     }
 
-    function EnviarEmail(email) {
-        // implementar a função de enviar o email real aqui
-        console.log('====== ENVIO DE EMAIL ======');
-        console.log('Para:', email);
-        console.log('Assunto: Redefinição de Senha - SIGA');
-        console.log('Link de redefinição: http://localhost:8000/redefinir-senha?token='); // + token);
-        console.log('Token expira em: 1 hora');
+    function resetarBotao() {
+        botao.disabled = false;
+        botao.textContent = "Enviar link de redefinição";
     }
 
+    function iniciarContador() {
+        if (intervalo) {
+            return;
+        }
 
-    btnRecuperar.addEventListener('click', function () {
+        let contador = 30;
+        botao.disabled = true;
+        botao.textContent = `Enviar link de redefinição (${contador}s)`;
+
+        intervalo = setInterval(() => {
+            contador -= 1;
+
+            if (contador <= 0) {
+                clearInterval(intervalo);
+                intervalo = null;
+                resetarBotao();
+                return;
+            }
+
+            botao.textContent = `Enviar link de redefinição (${contador}s)`;
+        }, 1000);
+    }
+
+    form.addEventListener('submit', async function (e) {
+        e.preventDefault();
         const email = emailInput.value.trim();
 
         if (!email) {
@@ -32,23 +74,49 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        const textoOriginal = this.textContent;
-        this.textContent = 'Enviando..';
-        this.disabled = true;
+        const formData = new URLSearchParams();
+        formData.append("email", email);
 
-        setTimeout(() => {
-            EnviarEmail(email);
-            Toast.sucesso('Link de recuperação enviado para o e-mail informado!', 'Email enviado!');
-            emailInput.value = '';
-            this.textContent = textoOriginal;
-            this.disabled = false;
-        }, 2000);
+        botao.disabled = true;
+        botao.textContent = "Enviando...";
+
+        try {
+            const csrfToken = await carregarTokenCsrf();
+            const csrfCookie = getCookie('fastapi-csrf-token');
+            if (!csrfToken || !csrfCookie) throw new Error('Token CSRF ausente');
+            const resposta = await fetch("/Esqueceu-Senha/Submit", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded", "X-CSRF-Token": csrfToken },
+                body: formData.toString()
+            });
+
+            const dados = await resposta.json();
+
+            if (resposta.ok && dados.enviado) {
+                Toast.sucesso("Verifique sua caixa de entrada e o spam.", "E-mail enviado!");
+                iniciarContador();
+            } else if (resposta.ok && !dados.enviado) {
+                Toast.erro(dados.message || "Não foi possível processar a solicitação.", "Erro");
+                resetarBotao();
+            } else {
+                Toast.erro("Não foi possível processar a solicitação. Tente novamente.");
+                resetarBotao();
+            }
+        } catch (erro) {
+            Toast.aviso("Não foi possível conectar. Tente novamente.", "Problema de conexão");
+            console.error(erro);
+            resetarBotao();
+        }
+    });
+
+    botao.addEventListener('click', function () {
+        form.requestSubmit();
     });
 
     emailInput.addEventListener('keypress', function (e) {
         if (e.key === 'Enter') {
             e.preventDefault();
-            btnRecuperar.click();
+            form.requestSubmit();
         }
     });
 
