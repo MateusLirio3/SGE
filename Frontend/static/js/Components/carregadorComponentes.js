@@ -162,19 +162,18 @@ function abrirSidebar() {
 }
 
 function logout() {
-    if (confirm('Tem certeza que deseja sair?')) {
-        fetch('/logout', {
-            method: 'POST',
-            credentials: 'same-origin'
+    fetch('/logout', {
+        method: 'POST',
+        credentials: 'same-origin'
+    })
+        .then(function () {
+            window.location.href = '/';
         })
-            .then(function () {
-                window.location.href = '/';
-            })
-            .catch(function () {
-                window.location.href = '/';
-            });
-    }
+        .catch(function () {
+            window.location.href = '/';
+        });
 }
+
 
 function fecharSidebar() {
     var sidebar = document.getElementById('sidebar');
