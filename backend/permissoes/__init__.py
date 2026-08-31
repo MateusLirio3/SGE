@@ -1,0 +1,1 @@
+from .permissoes import PERMISSOES, tem_permissao, paginas_permitidas, acoes_permitidas

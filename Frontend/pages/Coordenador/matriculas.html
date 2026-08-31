@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matrículas · SIGA</title>
+    <link rel="stylesheet" href="../../static/css/global.css">
+    <link rel="stylesheet" href="../../static/css/components.css">
+    <link rel="stylesheet" href="../../static/css/coordenador/coordenador.css">
+    <link rel="stylesheet" href="../../static/css/coordenador/matriculas.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div id="navbar-container"></div>
+
+    <main class="dashboard">
+        <div class="filters-bar">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Buscar por aluno, turma ou matrícula..."
+                    onkeyup="filtrar()">
+            </div>
+            <select id="filterStatus" onchange="filtrar()">
+                <option value="">Todos os status</option>
+                <option value="Ativa">Ativa</option>
+                <option value="Cancelada">Cancelada</option>
+                <option value="Concluída">Concluída</option>
+                <option value="Pendente">Pendente</option>
+            </select>
+            <button class="btn-filter" onclick="limparFiltros()">
+                <i class="fas fa-undo"></i> Limpar
+            </button>
+            <button class="btn-primary" onclick="abrirModal()">
+                <i class="fas fa-plus"></i> Nova Matrícula
+            </button>
+            <span class="total-registros" id="totalRegistros">0 matrículas</span>
+        </div>
+
+        <div class="card full">
+            <div class="table-responsive">
+                <table class="table-matriculas">
+                    <thead>
+                        <tr>
+                            <th style="width:50px;">#</th>
+                            <th>Aluno</th>
+                            <th>Turma</th>
+                            <th>Matrícula</th>
+                            <th>Data</th>
+                            <th>Status</th>
+                            <th style="width:130px;">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal-overlay" id="modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="modalTitle"><i class="fas fa-file-signature"></i> Nova Matrícula</h2>
+                <button class="modal-fechar" onclick="fecharModal()">×</button>
+            </div>
+            <form id="form" onsubmit="salvar(event)">
+                <input type="hidden" id="itemId">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Aluno *</label>
+                        <select id="aluno" required>
+                            <option value="">Selecione</option>
+                            <option value="Ana Silva">Ana Silva</option>
+                            <option value="Carlos Santos">Carlos Santos</option>
+                            <option value="Mariana Costa">Mariana Costa</option>
+                            <option value="João Pereira">João Pereira</option>
+                            <option value="Fernanda Lima">Fernanda Lima</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Turma *</label>
+                        <select id="turma" required>
+                            <option value="">Selecione</option>
+                            <option value="3° A - Eng. Software">3° A - Eng. Software</option>
+                            <option value="2° B - Ciência Comp.">2° B - Ciência Comp.</option>
+                            <option value="1° A - Sist. Informação">1° A - Sist. Informação</option>
+                            <option value="3° B - Eng. Software">3° B - Eng. Software</option>
+                            <option value="2° A - Sist. Informação">2° A - Sist. Informação</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Data da Matrícula</label>
+                        <input type="date" id="data">
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select id="status">
+                            <option value="Ativa">Ativa</option>
+                            <option value="Pendente">Pendente</option>
+                            <option value="Cancelada">Cancelada</option>
+                            <option value="Concluída">Concluída</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel" onclick="fecharModal()">Cancelar</button>
+                    <button type="submit" class="btn-primary" id="btnSalvar">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script src="../../static/js/Components/carregadorComponentes.js"></script>
+    <script src="../../static/js/Coordenador/matriculas.js"></script>
+</body>
+
+</html>

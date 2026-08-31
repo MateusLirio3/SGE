@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Professor · SIGA</title>
+    <link rel="stylesheet" href="../../static/css/global.css">
+    <link rel="stylesheet" href="../../static/css/components.css">
+    <link rel="stylesheet" href="../../static/css/coordenador/coordenador.css">
+    <link rel="stylesheet" href="../../static/css/coordenador/professor_detalhes.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div id="navbar-container"></div>
+
+    <main class="dashboard">
+        <div class="perfil-topo">
+            <div class="perfil-avatar">
+                <i class="fas fa-chalkboard-teacher"></i>
+            </div>
+            <div class="perfil-titulo">
+                <h1 id="nome">Carregando...</h1>
+                <p class="perfil-matricula"><i class="fas fa-id-card"></i> Matrícula: <span id="matricula">-</span></p>
+                <div class="perfil-acoes">
+                    <a href="/Professores" class="btn-voltar"><i class="fas fa-arrow-left"></i> Voltar</a>
+                    <button class="btn-editar" onclick="abrirModalEditar()"><i class="fas fa-edit"></i> Editar</button>
+                </div>
+            </div>
+            <div class="perfil-status">
+                <span class="status-badge" id="status">-</span>
+            </div>
+        </div>
+
+        <div class="info-cards">
+            <div class="info-card">
+                <div class="info-card-icon"><i class="fas fa-book"></i></div>
+                <div class="info-card-content">
+                    <span class="info-card-label">Disciplina</span>
+                    <span class="info-card-value" id="disciplina">-</span>
+                </div>
+            </div>
+            <div class="info-card">
+                <div class="info-card-icon"><i class="fas fa-id-card"></i></div>
+                <div class="info-card-content">
+                    <span class="info-card-label">CPF</span>
+                    <span class="info-card-value" id="cpf">-</span>
+                </div>
+            </div>
+            <div class="info-card">
+                <div class="info-card-icon"><i class="fas fa-envelope"></i></div>
+                <div class="info-card-content">
+                    <span class="info-card-label">Email</span>
+                    <span class="info-card-value" id="email">-</span>
+                </div>
+            </div>
+            <div class="info-card">
+                <div class="info-card-icon"><i class="fas fa-phone"></i></div>
+                <div class="info-card-content">
+                    <span class="info-card-label">Telefone</span>
+                    <span class="info-card-value" id="telefone">-</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal-overlay" id="modalEditar">
+        <div class="modal">
+            <div class="modal-header">
+                <h2><i class="fas fa-user-edit"></i> Editar Professor</h2>
+                <button class="modal-fechar" onclick="fecharModalEditar()">×</button>
+            </div>
+            <form id="formEditar" onsubmit="salvarEdicao(event)">
+                <input type="hidden" id="editId">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Nome *</label>
+                        <input type="text" id="editNome" placeholder="Nome completo" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Matrícula *</label>
+                        <input type="text" id="editMatricula" placeholder="Ex: P2024001" required>
+                    </div>
+                    <div class="form-group">
+                        <label>CPF *</label>
+                        <input type="text" id="editCpf" placeholder="000.000.000-00" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Disciplina *</label>
+                        <input type="text" id="editDisciplina" placeholder="Ex: Matemática" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select id="editStatus">
+                            <option value="Ativo">Ativo</option>
+                            <option value="Inativo">Inativo</option>
+                            <option value="Afastado">Afastado</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="editEmail" placeholder="email@exemplo.com">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Telefone</label>
+                        <input type="text" id="editTelefone" placeholder="(00) 00000-0000">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel" onclick="fecharModalEditar()">Cancelar</button>
+                    <button type="submit" class="btn-primary">Atualizar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script src="../../static/js/Components/carregadorComponentes.js"></script>
+    <script src="../../static/js/Coordenador/coordenador.js"></script>
+    <script src="../../static/js/Coordenador/professor_detalhes.js"></script>
+</body>
+
+</html>

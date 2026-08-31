@@ -10,13 +10,20 @@ from backend.routes.CSRF.csrfRoutes import verify_csrf
 
 from database.database_conection import pegar_sessao
 
-# ─────────────────────────────────────────────────────────────────────────────
 DURACAO_SESSAO_HORAS    = 8                             
-DURACAO_SESSAO_SEGUNDOS = DURACAO_SESSAO_HORAS * 3600   # usado no max_age dos cookies
+DURACAO_SESSAO_SEGUNDOS = DURACAO_SESSAO_HORAS * 3600
 
-templates = Jinja2Templates(directory="frontend/pages")
+templates = Jinja2Templates(directory="Frontend/pages")
 
 router = APIRouter(dependencies=[Depends(verify_csrf)])
+
+@router.get("/", tags=["Autenticação", "Paginas"])
+async def raiz(request: Request):
+    return templates.TemplateResponse(
+        request=request,
+        name="paginaLogin.html",
+        context={"request": request}
+    )
 
 @router.get("/login", tags=["Autenticação","Paginas"])
 async def carregarPaginaLogin(request: Request):
@@ -35,7 +42,7 @@ async def login(
     from database.databaseCrud.Erros import ErroNaoEncontrado
 
     try:
-        usuario = autenticar_usuario(form_data.username,form_data.password, sessao)
+        usuario = autenticar_usuario(form_data.username, form_data.password, sessao)
     except ErroNaoEncontrado:
         raise HTTPException(
             status_code=401,
@@ -54,7 +61,6 @@ async def login(
         data={"sub": usuario.email},
         tempo_para_expirar=timedelta(hours=DURACAO_SESSAO_HORAS)
     )
-
 
     response = JSONResponse(content={
         "token_type":   "bearer",

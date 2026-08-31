@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alunos · SIGA</title>
+    <link rel="stylesheet" href="../../static/css/global.css">
+    <link rel="stylesheet" href="../../static/css/components.css">
+    <link rel="stylesheet" href="../../static/css/coordenador/coordenador.css">
+    <link rel="stylesheet" href="../../static/css/coordenador/alunos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div id="navbar-container"></div>
+
+    <main class="dashboard">
+        <div class="filters-bar">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Buscar por nome, matrícula ou CPF..."
+                    onkeyup="filtrar()">
+            </div>
+            <select id="filterCurso" onchange="filtrar()">
+                <option value="">Todos os cursos</option>
+                <option value="Engenharia de Software">Engenharia de Software</option>
+                <option value="Ciência da Computação">Ciência da Computação</option>
+                <option value="Sistemas de Informação">Sistemas de Informação</option>
+                <option value="Análise de Sistemas">Análise de Sistemas</option>
+            </select>
+            <select id="filterStatus" onchange="filtrar()">
+                <option value="">Todos os status</option>
+                <option value="Ativo">Ativo</option>
+                <option value="Inativo">Inativo</option>
+                <option value="Pendente">Pendente</option>
+            </select>
+            <button class="btn-filter" onclick="limparFiltros()">
+                <i class="fas fa-undo"></i> Limpar
+            </button>
+            <button class="btn-primary" onclick="abrirModal()">
+                <i class="fas fa-plus"></i> Novo Aluno
+            </button>
+            <span class="total-registros" id="totalRegistros">0 alunos</span>
+        </div>
+
+        <div class="card full">
+            <div class="table-responsive">
+                <table class="table-alunos">
+                    <thead>
+                        <tr>
+                            <th style="width:50px;">#</th>
+                            <th>Nome</th>
+                            <th>Matrícula</th>
+                            <th>CPF</th>
+                            <th>Curso</th>
+                            <th>Turma</th>
+                            <th>Status</th>
+                            <th style="width:130px;">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal-overlay" id="modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="modalTitle"><i class="fas fa-user-plus"></i> Novo Aluno</h2>
+                <button class="modal-fechar" onclick="fecharModal()">×</button>
+            </div>
+            <form id="form" onsubmit="salvar(event)">
+                <input type="hidden" id="itemId">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Nome *</label>
+                        <input type="text" id="nome" placeholder="Nome completo" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Matrícula *</label>
+                        <input type="text" id="matricula" placeholder="Ex: 2024001" required>
+                    </div>
+                    <div class="form-group">
+                        <label>CPF *</label>
+                        <input type="text" id="cpf" placeholder="000.000.000-00" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Curso *</label>
+                        <select id="curso" required>
+                            <option value="">Selecione</option>
+                            <option value="Engenharia de Software">Engenharia de Software</option>
+                            <option value="Ciência da Computação">Ciência da Computação</option>
+                            <option value="Sistemas de Informação">Sistemas de Informação</option>
+                            <option value="Análise de Sistemas">Análise de Sistemas</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Turma</label>
+                        <select id="turma">
+                            <option value="">Selecione</option>
+                            <option value="1° A">1° A</option>
+                            <option value="1° B">1° B</option>
+                            <option value="2° A">2° A</option>
+                            <option value="2° B">2° B</option>
+                            <option value="3° A">3° A</option>
+                            <option value="3° B">3° B</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select id="status">
+                            <option value="Ativo">Ativo</option>
+                            <option value="Inativo">Inativo</option>
+                            <option value="Pendente">Pendente</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="email" placeholder="email@exemplo.com">
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Telefone</label>
+                        <input type="text" id="telefone" placeholder="(00) 00000-0000">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel" onclick="fecharModal()">Cancelar</button>
+                    <button type="submit" class="btn-primary" id="btnSalvar">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script src="../../static/js/Components/carregadorComponentes.js"></script>
+
+    <script>
+        // ta aqui pq tava bugando quando botava arquivo separado, n sei pq 
+        var alunos = [
+            { id: 1, nome: 'Ana Silva', matricula: '2024001', cpf: '123.456.789-00', curso: 'Engenharia de Software', turma: '3° A', status: 'Ativo', email: 'ana@email.com', telefone: '(11) 99999-9999', endereco: 'Rua das Flores, 123', data_nascimento: '2000-05-15' },
+            { id: 2, nome: 'Carlos Santos', matricula: '2024002', cpf: '987.654.321-00', curso: 'Ciência da Computação', turma: '2° B', status: 'Ativo', email: 'carlos@email.com', telefone: '(11) 98888-8888', endereco: 'Av. Principal, 456', data_nascimento: '2001-08-20' },
+            { id: 3, nome: 'Mariana Costa', matricula: '2024003', cpf: '456.789.123-00', curso: 'Sistemas de Informação', turma: '1° A', status: 'Pendente', email: 'mariana@email.com', telefone: '(11) 97777-7777', endereco: 'Rua das Palmeiras, 789', data_nascimento: '2000-11-10' },
+            { id: 4, nome: 'João Pereira', matricula: '2024004', cpf: '789.123.456-00', curso: 'Engenharia de Software', turma: '3° B', status: 'Ativo', email: 'joao@email.com', telefone: '(11) 96666-6666', endereco: 'Av. Brasil, 1010', data_nascimento: '1999-03-25' },
+            { id: 5, nome: 'Fernanda Lima', matricula: '2024005', cpf: '321.654.987-00', curso: 'Ciência da Computação', turma: '2° A', status: 'Inativo', email: 'fernanda@email.com', telefone: '(11) 95555-5555', endereco: 'Rua dos Pinheiros, 202', data_nascimento: '2001-07-30' }
+        ];
+
+        var nextId = 6;
+        function renderizarAlunos(lista) {
+            var tbody = document.getElementById('tableBody');
+            if (!tbody) {
+                console.error('❌ tableBody não encontrado');
+                return;
+            }
+
+            var dados = lista || alunos;
+
+            if (dados.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="empty-state">
+                            <i class="fas fa-user-slash"></i>
+                            <p>Nenhum aluno encontrado</p>
+                            <button class="btn-primary" onclick="abrirModal()">
+                                <i class="fas fa-plus"></i> Adicionar
+                            </button>
+                        </td>
+                    </tr>
+                `;
+                var totalEl = document.getElementById('totalRegistros');
+                if (totalEl) totalEl.textContent = '0 alunos';
+                return;
+            }
+
+            var html = '';
+            for (var i = 0; i < dados.length; i++) {
+                var a = dados[i];
+                var statusClass = a.status === 'Ativo' ? 'ativo' : a.status === 'Pendente' ? 'pendente' : 'inativo';
+                html += `
+                    <tr>
+                        <td>${a.id}</td>
+                        <td><strong>${a.nome}</strong></td>
+                        <td>${a.matricula}</td>
+                        <td>${a.cpf}</td>
+                        <td>${a.curso}</td>
+                        <td>${a.turma || '-'}</td>
+                        <td><span class="status-badge ${statusClass}">${a.status}</span></td>
+                        <td>
+                            <button class="action-btn view" onclick="visualizarAluno(${a.id})" title="Visualizar"><i class="fas fa-eye"></i></button>
+                            <button class="action-btn edit" onclick="editarAluno(${a.id})" title="Editar"><i class="fas fa-edit"></i></button>
+                            <button class="action-btn delete" onclick="excluirAluno(${a.id})" title="Excluir"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            }
+            tbody.innerHTML = html;
+
+            var totalEl = document.getElementById('totalRegistros');
+            if (totalEl) totalEl.textContent = dados.length + ' alunos';
+        }
+        function filtrar() {
+            var search = document.getElementById('searchInput').value.toLowerCase();
+            var curso = document.getElementById('filterCurso').value;
+            var status = document.getElementById('filterStatus').value;
+
+            var filtrados = [];
+            for (var i = 0; i < alunos.length; i++) {
+                var a = alunos[i];
+                var matchSearch = a.nome.toLowerCase().includes(search) || a.matricula.includes(search) || a.cpf.includes(search);
+                var matchCurso = curso === '' || a.curso === curso;
+                var matchStatus = status === '' || a.status === status;
+                if (matchSearch && matchCurso && matchStatus) {
+                    filtrados.push(a);
+                }
+            }
+
+            renderizarAlunos(filtrados);
+        }
+
+        function limparFiltros() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('filterCurso').value = '';
+            document.getElementById('filterStatus').value = '';
+            renderizarAlunos(alunos);
+        }
+
+
+        function visualizarAluno(id) {
+            window.location.href = '/Aluno/' + id;
+        }
+
+        function editarAluno(id) {
+            var aluno = null;
+            for (var i = 0; i < alunos.length; i++) {
+                if (alunos[i].id === id) {
+                    aluno = alunos[i];
+                    break;
+                }
+            }
+            if (!aluno) return;
+
+            document.getElementById('modalTitle').innerHTML = '<i class="fas fa-user-edit"></i> Editar Aluno';
+            document.getElementById('btnSalvar').textContent = 'Atualizar';
+            document.getElementById('itemId').value = aluno.id;
+            document.getElementById('nome').value = aluno.nome;
+            document.getElementById('matricula').value = aluno.matricula;
+            document.getElementById('cpf').value = aluno.cpf;
+            document.getElementById('curso').value = aluno.curso;
+            document.getElementById('turma').value = aluno.turma || '';
+            document.getElementById('status').value = aluno.status;
+            document.getElementById('email').value = aluno.email || '';
+            document.getElementById('telefone').value = aluno.telefone || '';
+
+            document.getElementById('modal').classList.add('ativo');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function abrirModal() {
+            document.getElementById('modalTitle').innerHTML = '<i class="fas fa-user-plus"></i> Novo Aluno';
+            document.getElementById('btnSalvar').textContent = 'Salvar';
+            document.getElementById('form').reset();
+            document.getElementById('itemId').value = '';
+            document.getElementById('status').value = 'Ativo';
+
+            document.getElementById('modal').classList.add('ativo');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function fecharModal() {
+            document.getElementById('modal').classList.remove('ativo');
+            document.body.style.overflow = '';
+        }
+
+        function salvar(event) {
+            event.preventDefault();
+
+            var id = document.getElementById('itemId').value;
+            var dados = {
+                nome: document.getElementById('nome').value.trim(),
+                matricula: document.getElementById('matricula').value.trim(),
+                cpf: document.getElementById('cpf').value.trim(),
+                curso: document.getElementById('curso').value,
+                turma: document.getElementById('turma').value,
+                status: document.getElementById('status').value,
+                email: document.getElementById('email').value.trim(),
+                telefone: document.getElementById('telefone').value.trim()
+            };
+
+            if (id) {
+                var index = -1;
+                for (var i = 0; i < alunos.length; i++) {
+                    if (alunos[i].id === parseInt(id)) {
+                        index = i;
+                        break;
+                    }
+                }
+                if (index !== -1) {
+                    alunos[index] = { ...alunos[index], ...dados };
+                    showToast('Aluno atualizado com sucesso!', 'success');
+                }
+            } else {
+                dados.id = nextId++;
+                alunos.push(dados);
+                showToast('Aluno cadastrado com sucesso!', 'success');
+            }
+
+            fecharModal();
+            renderizarAlunos(alunos);
+        }
+
+        function excluirAluno(id) {
+            var aluno = null;
+            for (var i = 0; i < alunos.length; i++) {
+                if (alunos[i].id === id) {
+                    aluno = alunos[i];
+                    break;
+                }
+            }
+            if (!aluno) return;
+            if (confirm('Tem certeza que deseja excluir "' + aluno.nome + '"?')) {
+                var novosAlunos = [];
+                for (var i = 0; i < alunos.length; i++) {
+                    if (alunos[i].id !== id) {
+                        novosAlunos.push(alunos[i]);
+                    }
+                }
+                alunos = novosAlunos;
+                renderizarAlunos(alunos);
+                showToast('Aluno "' + aluno.nome + '" excluído', 'error');
+            }
+        }
+
+        function showToast(message, type) {
+            var container = document.getElementById('toast-container');
+            if (!container) return;
+            var toast = document.createElement('div');
+            toast.className = 'toast toast-' + (type || 'info');
+            toast.innerHTML = `
+                <span>${message}</span>
+                <button onclick="this.parentElement.remove()" style="background:none;border:none;font-size:18px;cursor:pointer;color:#999;">×</button>
+            `;
+            container.appendChild(toast);
+            setTimeout(function () { toast.remove(); }, 4000);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            renderizarAlunos(alunos);
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,206 @@
+.config-header {
+    margin-bottom: 30px;
+}
+
+.config-header h1 {
+    font-size: 24px;
+    color: #0d47a1;
+}
+
+.config-header h1 i {
+    color: #2196f3;
+    margin-right: 10px;
+}
+
+.config-subtitle {
+    color: #666;
+    font-size: 14px;
+    margin-top: 4px;
+}
+
+.config-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+}
+
+.config-card {
+    background: #fff;
+    border: 1px solid #90caf9;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.config-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    background: #e3f2fd;
+    border-bottom: 1px solid #90caf9;
+}
+
+.config-card-header i {
+    font-size: 20px;
+    color: #2196f3;
+}
+
+.config-card-header h2 {
+    font-size: 16px;
+    color: #0d47a1;
+    font-weight: 600;
+}
+
+.config-card-body {
+    padding: 20px;
+}
+
+.config-item {
+    margin-bottom: 16px;
+}
+
+.config-item label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.config-item input,
+.config-item select {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.2s;
+}
+
+.config-item input:focus,
+.config-item select:focus {
+    border-color: #2196f3;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+}
+
+.config-toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.config-toggle:last-child {
+    border-bottom: none;
+}
+
+.config-toggle label {
+    font-size: 14px;
+    color: #333;
+}
+
+.config-toggle input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: #2196f3;
+}
+
+.btn-save {
+    background: #2196f3;
+    color: #fff;
+    border: none;
+    padding: 8px 24px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 8px;
+}
+
+.btn-save:hover {
+    background: #1976d2;
+}
+
+#toast-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.toast {
+    background: #fff;
+    border-radius: 6px;
+    padding: 12px 20px;
+    min-width: 280px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    animation: toastEntrar 0.3s ease;
+    border-left: 4px solid #2196f3;
+}
+
+.toast-success {
+    border-left-color: #4caf50;
+}
+
+.toast-error {
+    border-left-color: #f44336;
+}
+
+.toast-warning {
+    border-left-color: #ff9800;
+}
+
+.toast-info {
+    border-left-color: #2196f3;
+}
+
+.toast button {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #999;
+    padding: 0 4px;
+}
+
+.toast button:hover {
+    color: #333;
+}
+
+@keyframes toastEntrar {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@media (max-width: 900px) {
+    .config-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .config-card-body {
+        padding: 14px;
+    }
+
+    .config-header h1 {
+        font-size: 20px;
+    }
+}

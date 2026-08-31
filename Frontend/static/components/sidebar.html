@@ -1,0 +1,23 @@
+<div class="sidebar-overlay" onclick="fecharSidebar()"></div>
+
+<div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <h2>SIGA</h2>
+        <button class="sidebar-fechar" onclick="fecharSidebar()">×</button>
+    </div>
+    <ul class="sidebar-menu">
+        <li data-page="dashboard"><a href="/Pagina-Inicial"><i class="fas fa-home"></i> Dashboard</a></li>
+        <li data-page="alunos"><a href="/Alunos"><i class="fas fa-users"></i> Alunos</a></li>
+        <li data-page="professores"><a href="/Professores"><i class="fas fa-chalkboard-teacher"></i> Professores</a>
+        </li>
+        <li data-page="turmas"><a href="/Turmas"><i class="fas fa-door-open"></i> Turmas</a></li>
+        <li data-page="matriculas"><a href="/Matriculas"><i class="fas fa-file-signature"></i> Matrículas</a></li>
+        <li data-page="minhas_matriculas"><a href="/Minhas-Matriculas"><i class="fas fa-file-signature"></i> Minhas
+                Matrículas</a></li>
+        <li data-page="calendario"><a href="/Calendario"><i class="fas fa-calendar-alt"></i> Calendário</a></li>
+        <li data-page="configuracoes"><a href="/Configuracoes"><i class="fas fa-cog"></i> Configurações</a></li>
+    </ul>
+    <div class="sidebar-footer">
+        <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Sair</a>
+    </div>
+</div>

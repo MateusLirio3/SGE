@@ -1,4 +1,4 @@
- 
+
 const form = document.querySelector("form");
 
 // ─────────────────────────────────────────────────────────────
@@ -19,7 +19,7 @@ document.addEventListener("keydown", (e) => {
     if (!["Enter", "ArrowDown", "ArrowUp"].includes(e.key)) return;
     const campos = obterCamposAtivos();
     const focado = document.activeElement;
-    const index  = campos.indexOf(focado);
+    const index = campos.indexOf(focado);
     if (index === -1) return;
     if (e.key === "ArrowUp" || (e.key === "Enter" && e.shiftKey)) {
         const anterior = campos[index - 1];
@@ -54,7 +54,7 @@ async function carregarTokenCsrf() {
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const usuario = document.querySelector('input[name="username"]').value;
-    const senha   = document.querySelector('input[name="password"]').value;
+    const senha = document.querySelector('input[name="password"]').value;
     const formData = new URLSearchParams();
     formData.append("username", usuario);
     formData.append("password", senha);
@@ -65,7 +65,7 @@ form.addEventListener("submit", async (e) => {
         const resposta = await fetch("/login/submit", {
             method: "POST",
             credentials: 'same-origin',
-            headers: { 
+            headers: {
                 "Content-Type": "application/x-www-form-urlencoded",
                 "X-CSRF-Token": csrfToken
             },
@@ -74,24 +74,25 @@ form.addEventListener("submit", async (e) => {
         const dados = await resposta.json();
         console.log(dados);
         if (resposta.ok) {
-            localStorage.setItem("token",        dados.access_token);
+            localStorage.setItem("token", dados.access_token);
             localStorage.setItem("tipo_usuario", dados.tipo);
-            localStorage.setItem("nomeUsuario",  dados.usuario);
+            localStorage.setItem("nomeUsuario", dados.usuario);
             Toast.sucesso("Redirecionando...", "Login realizado!");
+            // DEPOIS
             const rotas = {
-                "Aluno":       "/Aluno/Pagina-Inicial",
-                "Coordenador": "/Coordenador/Pagina-Inicial",
-                "Admin": "/Admin/Pagina-Inicial"
+                "Aluno": "/Pagina-Inicial",
+                "Coordenador": "/Pagina-Inicial",
+                "Admin": "/Pagina-Inicial"
             };
             const destino = rotas[dados.tipo];
             if (destino) {
-            setTimeout(() => { window.location.href = destino; }, 1200);
+                setTimeout(() => { window.location.href = destino; }, 1200);
+            }
+        } else {
+            Toast.erro("Usuário e/ou senha inválidos.");
         }
-    } else {
-        Toast.erro("Usuário e/ou senha inválidos.");
-    }
-        } catch (erro) {
-            Toast.aviso("Não foi possível conectar. Tente novamente.", "Problema de conexão");
-            console.error(erro);
-        };
+    } catch (erro) {
+        Toast.aviso("Não foi possível conectar. Tente novamente.", "Problema de conexão");
+        console.error(erro);
+    };
 });

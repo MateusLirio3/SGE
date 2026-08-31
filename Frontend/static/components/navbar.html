@@ -1,0 +1,38 @@
+<nav class="navbar">
+    <div class="navbar-left">
+        <button class="navbar-hamburger" onclick="abrirSidebar()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <div class="navbar-logo">
+            <span>SIGA</span>
+            <span class="navbar-sub">Sistema Interno de Gerenciamento Acadêmico e Autenticação</span>
+        </div>
+    </div>
+    
+    <div class="navbar-center">
+        <a href="/Pagina-Inicial" class="nav-link" data-page="dashboard">Dashboard</a>
+        <a href="/Alunos" class="nav-link" data-page="alunos">Alunos</a>
+        <a href="/Professores" class="nav-link" data-page="professores">Professores</a>
+        <a href="/Turmas" class="nav-link" data-page="turmas">Turmas</a>
+        <div class="navbar-dropdown">
+            <button class="navbar-dropdown-botao">Sites ▼</button>
+            <div class="dropdown-menu">
+                <a href="https://www.isepam.edu.br" target="_blank">Isepam</a>
+                <a href="https://www.faetec.rj.gov.br/" target="_blank">Portal Faetec</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="navbar-right">
+        <div class="nav-user" onclick="window.location.href='/Perfil'">
+            <div class="user-avatar"><i class="fas fa-user"></i></div>
+            <div class="user-info">
+                <span class="user-name" id="userName">Olá, Usuário</span>
+                <span class="user-role" id="userRole">---</span>
+            </div>
+            <i class="fas fa-chevron-down user-arrow"></i>
+        </div>
+    </div>
+</nav>

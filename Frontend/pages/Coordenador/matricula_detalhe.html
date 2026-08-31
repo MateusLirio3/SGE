@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes da Matrícula · SIGA</title>
+    <link rel="stylesheet" href="../../static/css/global.css">
+    <link rel="stylesheet" href="../../static/css/components.css">
+    <link rel="stylesheet" href="../../static/css/coordenador/coordenador.css">
+    <link rel="stylesheet" href="../../static/css/coordenador/matricula_detalhes.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div id="navbar-container"></div>
+
+    <main class="dashboard">
+        <div class="perfil-topo">
+            <div class="perfil-avatar">
+                <i class="fas fa-file-signature"></i>
+            </div>
+            <div class="perfil-titulo">
+                <h1 id="aluno">Carregando...</h1>
+                <p class="perfil-matricula"><i class="fas fa-door-open"></i> Turma: <span id="turma">-</span></p>
+                <div class="perfil-acoes">
+                    <a href="/Matriculas" class="btn-voltar"><i class="fas fa-arrow-left"></i> Voltar</a>
+                    <button class="btn-editar" onclick="abrirModalEditar()"><i class="fas fa-edit"></i> Editar</button>
+                </div>
+            </div>
+            <div class="perfil-status">
+                <span class="status-badge" id="status">-</span>
+            </div>
+        </div>
+
+        <div class="info-cards">
+            <div class="info-card">
+                <div class="info-card-icon"><i class="fas fa-id-card"></i></div>
+                <div class="info-card-content">
+                    <span class="info-card-label">Nº Matrícula</span>
+                    <span class="info-card-value" id="matricula">-</span>
+                </div>
+            </div>
+            <div class="info-card">
+                <div class="info-card-icon"><i class="fas fa-calendar-alt"></i></div>
+                <div class="info-card-content">
+                    <span class="info-card-label">Data</span>
+                    <span class="info-card-value" id="data">-</span>
+                </div>
+            </div>
+            <div class="info-card">
+                <div class="info-card-icon"><i class="fas fa-user"></i></div>
+                <div class="info-card-content">
+                    <span class="info-card-label">Aluno</span>
+                    <span class="info-card-value" id="alunoInfo">-</span>
+                </div>
+            </div>
+            <div class="info-card">
+                <div class="info-card-icon"><i class="fas fa-door-open"></i></div>
+                <div class="info-card-content">
+                    <span class="info-card-label">Turma</span>
+                    <span class="info-card-value" id="turmaInfo">-</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal-overlay" id="modalEditar">
+        <div class="modal">
+            <div class="modal-header">
+                <h2><i class="fas fa-edit"></i> Editar Matrícula</h2>
+                <button class="modal-fechar" onclick="fecharModalEditar()">×</button>
+            </div>
+            <form id="formEditar" onsubmit="salvarEdicao(event)">
+                <input type="hidden" id="editId">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Aluno</label>
+                        <select id="editAluno">
+                            <option value="Ana Silva">Ana Silva</option>
+                            <option value="Carlos Santos">Carlos Santos</option>
+                            <option value="Mariana Costa">Mariana Costa</option>
+                            <option value="João Pereira">João Pereira</option>
+                            <option value="Fernanda Lima">Fernanda Lima</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Turma</label>
+                        <select id="editTurma">
+                            <option value="3° A - Eng. Software">3° A - Eng. Software</option>
+                            <option value="2° B - Ciência Comp.">2° B - Ciência Comp.</option>
+                            <option value="1° A - Sist. Informação">1° A - Sist. Informação</option>
+                            <option value="3° B - Eng. Software">3° B - Eng. Software</option>
+                            <option value="2° A - Sist. Informação">2° A - Sist. Informação</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Data</label>
+                        <input type="date" id="editData">
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select id="editStatus">
+                            <option value="Ativa">Ativa</option>
+                            <option value="Pendente">Pendente</option>
+                            <option value="Cancelada">Cancelada</option>
+                            <option value="Concluída">Concluída</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-cancel" onclick="fecharModalEditar()">Cancelar</button>
+                    <button type="submit" class="btn-primary">Atualizar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script src="../../static/js/Components/carregadorComponentes.js"></script>
+    <script src="../../static/js/Coordenador/coordenador.js"></script>
+    <script src="../../static/js/Coordenador/matriculas_detalhe.js"></script>
+</body>
+
+</html>

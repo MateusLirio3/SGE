@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard · SIGA</title>
+    <link rel="stylesheet" href="../static/css/global.css">
+    <link rel="stylesheet" href="../static/css/components.css">
+    <link rel="stylesheet" href="../static/css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div id="navbar-container"></div>
+
+    <main class="dashboard">
+        <div class="metric-grid">
+            {% if tipo_usuario == 'Coordenador' %}
+            <div class="metric-card">
+                <span class="metric-label">Alunos</span>
+                <span class="metric-value">1.284</span>
+                <span class="metric-change positive">+12%</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-label">Professores</span>
+                <span class="metric-value">64</span>
+                <span class="metric-change neutral">±0</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-label">Turmas</span>
+                <span class="metric-value">32</span>
+                <span class="metric-change positive">+2</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-label">Matrículas</span>
+                <span class="metric-value">1.156</span>
+                <span class="metric-change positive">+8%</span>
+            </div>
+            {% elif tipo_usuario == 'Aluno' %}
+            <div class="metric-card">
+                <span class="metric-label">Minhas Matrículas</span>
+                <span class="metric-value">3</span>
+                <span class="metric-change positive">Ativo</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-label">Minhas Notas</span>
+                <span class="metric-value">8.5</span>
+                <span class="metric-change positive">Média</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-label">Frequência</span>
+                <span class="metric-value">92%</span>
+                <span class="metric-change positive">+5%</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-label">Turma</span>
+                <span class="metric-value">3° A</span>
+                <span class="metric-change neutral">—</span>
+            </div>
+            {% elif tipo_usuario == 'Professor' %}
+            <div class="metric-card">
+                <span class="metric-label">Minhas Turmas</span>
+                <span class="metric-value">4</span>
+                <span class="metric-change positive">+1</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-label">Meus Alunos</span>
+                <span class="metric-value">120</span>
+                <span class="metric-change neutral">±0</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-label">Aulas</span>
+                <span class="metric-value">16</span>
+                <span class="metric-change positive">+2</span>
+            </div>
+            <div class="metric-card">
+                <span class="metric-label">Frequência Geral</span>
+                <span class="metric-value">78%</span>
+                <span class="metric-change negative">-3%</span>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="row">
+            {% if tipo_usuario == 'Coordenador' %}
+            <div class="card full">
+                <div class="card-header">
+                    <h2><i class="fas fa-clock"></i> Últimas Matrículas</h2>
+                    <a href="/Matriculas" class="ver-todas">Ver todas</a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table-matriculas">
+                        <thead>
+                            <tr>
+                                <th>Aluno</th>
+                                <th>Turma</th>
+                                <th>Data</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Ana Silva</strong></td>
+                                <td>3° A - Eng. Software</td>
+                                <td>25/08/2026</td>
+                                <td><span class="status-badge ativo">Ativa</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Carlos Santos</strong></td>
+                                <td>2° B - Ciência Comp.</td>
+                                <td>24/08/2026</td>
+                                <td><span class="status-badge ativo">Ativa</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Mariana Costa</strong></td>
+                                <td>1° A - Sist. Informação</td>
+                                <td>23/08/2026</td>
+                                <td><span class="status-badge pendente">Pendente</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% elif tipo_usuario == 'Aluno' %}
+            <div class="card full">
+                <div class="card-header">
+                    <h2><i class="fas fa-file-signature"></i> Minhas Matrículas</h2>
+                </div>
+                <div class="table-responsive">
+                    <table class="table-matriculas">
+                        <thead>
+                            <tr>
+                                <th>Turma</th>
+                                <th>Data</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>3° A - Eng. Software</td>
+                                <td>25/08/2026</td>
+                                <td><span class="status-badge ativo">Ativa</span></td>
+                            </tr>
+                            <tr>
+                                <td>2° A - Sist. Informação</td>
+                                <td>24/08/2026</td>
+                                <td><span class="status-badge ativo">Ativa</span></td>
+                            </tr>
+                            <tr>
+                                <td>1° A - Ciência Comp.</td>
+                                <td>23/08/2026</td>
+                                <td><span class="status-badge pendente">Pendente</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% elif tipo_usuario == 'Professor' %}
+            <div class="card full">
+                <div class="card-header">
+                    <h2><i class="fas fa-door-open"></i> Minhas Turmas</h2>
+                    <a href="/Turmas" class="ver-todas">Ver todas</a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table-matriculas">
+                        <thead>
+                            <tr>
+                                <th>Turma</th>
+                                <th>Disciplina</th>
+                                <th>Alunos</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>3° A - Eng. Software</td>
+                                <td>Matemática</td>
+                                <td>42</td>
+                                <td><span class="status-badge ativo">Ativa</span></td>
+                            </tr>
+                            <tr>
+                                <td>2° B - Ciência Comp.</td>
+                                <td>Matemática</td>
+                                <td>38</td>
+                                <td><span class="status-badge ativo">Ativa</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        {% if tipo_usuario == 'Coordenador' %}
+        <div class="row two-col">
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-graduation-cap"></i> Turmas por Curso</h2>
+                </div>
+                <div class="lista-barras">
+                    <div class="barra-item"><span>Eng. Software</span>
+                        <div class="barra-track">
+                            <div class="barra-fill" style="width:35%"></div>
+                        </div><span class="barra-count">8</span>
+                    </div>
+                    <div class="barra-item"><span>Ciência Comp.</span>
+                        <div class="barra-track">
+                            <div class="barra-fill" style="width:28%"></div>
+                        </div><span class="barra-count">7</span>
+                    </div>
+                    <div class="barra-item"><span>Sist. Informação</span>
+                        <div class="barra-track">
+                            <div class="barra-fill" style="width:22%"></div>
+                        </div><span class="barra-count">5</span>
+                    </div>
+                    <div class="barra-item"><span>Análise Sist.</span>
+                        <div class="barra-track">
+                            <div class="barra-fill" style="width:15%"></div>
+                        </div><span class="barra-count">4</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2><i class="fas fa-exclamation-triangle"></i> Alertas</h2><span class="badge">4</span>
+                </div>
+                <ul class="alert-list">
+                    <li class="alert-item danger"><i class="fas fa-user-plus"></i>
+                        <div><strong>Aluno duplicado</strong><span class="alert-desc">João Silva - Matrícula 2024001 já
+                                existe</span></div>
+                    </li>
+                    <li class="alert-item warning"><i class="fas fa-user-slash"></i>
+                        <div><strong>Aluno sem turma</strong><span class="alert-desc">Maria Oliveira - Matrícula 2024087
+                                sem turma</span></div>
+                    </li>
+                    <li class="alert-item danger"><i class="fas fa-file-signature"></i>
+                        <div><strong>Matrícula duplicada</strong><span class="alert-desc">Carlos Santos - Matrícula
+                                2024123 duplicada</span></div>
+                    </li>
+                    <li class="alert-item warning"><i class="fas fa-id-card"></i>
+                        <div><strong>Dados incompletos</strong><span class="alert-desc">Ana Pereira - CPF e endereço não
+                                preenchidos</span></div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+    </main>
+
+    <script src="../static/js/Components/carregadorComponentes.js"></script>
+</body>
+
+</html>
