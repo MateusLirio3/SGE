@@ -3,11 +3,12 @@ from database.models.Turma import Turma
 from .Erros import ErroExcluir, ErroNaoEncontrado, ErroRegistrar, ErroAtualizar
 from sqlalchemy.orm import make_transient
 
-def criar_Turma(nome, periodo, descricao):
+def criar_Turma(nome, periodo, descricao, id_curso):
     
     sessao = sessao_local()
     try:
         novo = Turma(
+            id_curso=id_curso,
             nome=nome,
             periodo=periodo,
             descricao=descricao
