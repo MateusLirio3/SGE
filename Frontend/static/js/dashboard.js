@@ -12,7 +12,7 @@ function atualizarContagens() {
     fetch("/API/GetProfessoresCount")
         .then(response => response.json())
         .then(data => {
-            contProfessores.textContent = data.quantidade;
+            contProfessores.textContent = data;
         });
     // fetch("/API/GetDisciplinasCount")
     //     .then(response => response.json())
